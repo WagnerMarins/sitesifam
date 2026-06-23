@@ -1,4 +1,4 @@
-import nitroHandler from './server.js';
+﻿import nitroHandler from './server.js';
 
 export default {
   async fetch(request, env, ctx) {
@@ -9,7 +9,15 @@ export default {
       url.pathname.startsWith('/_') ||
       /\.(css|js|png|jpg|jpeg|svg|ico|woff2?|ttf|json|webmanifest)$/.test(url.pathname);
 
-    if (isAsset && env.ASSETS) {
+    const isRedirectPage =
+      url.pathname === '/laboratorio' ||
+      url.pathname === '/laboratorio/' ||
+      url.pathname === '/ressonancia' ||
+      url.pathname === '/ressonancia/' ||
+      url.pathname === '/consultas' ||
+      url.pathname === '/consultas/';
+
+    if ((isAsset || isRedirectPage) && env.ASSETS) {
       return env.ASSETS.fetch(request);
     }
 
