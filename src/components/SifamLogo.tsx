@@ -1,9 +1,9 @@
-import logoAsset from "@/assets/sifam-logo.png.asset.json";
+import logo from "@/assets/sifam-logo.png";
 
 export function SifamLogo({ className = "h-12 w-auto" }: { className?: string }) {
   return (
     <img
-      src={logoAsset.url}
+      src={logo}
       alt="Clínica Sifam — Saúde Integrada da Família"
       className={className}
       width={120}
