@@ -14,6 +14,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 const GA_MEASUREMENT_ID = "G-P73HZT7R0L";
 const GA_SCRIPT_ID = "ga4-script";
+const GOOGLE_ADS_ID = "AW-17861864988";
+const WHATSAPP_CONVERSION_SEND_TO = "AW-17861864988/UEWuCKLJv9scEJzcmcVC";
 
 declare global {
   interface Window {
@@ -166,6 +168,27 @@ function GoogleAnalytics() {
     };
     window.gtag("js", new Date());
     window.gtag("config", GA_MEASUREMENT_ID, { send_page_view: true });
+    window.gtag("config", GOOGLE_ADS_ID);
+  }, []);
+
+  return null;
+}
+
+function WhatsAppConversionTracker() {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    function handleClick(event: MouseEvent) {
+      const target = event.target as HTMLElement | null;
+      const link = target?.closest?.("a[href*='wa.me']") as HTMLAnchorElement | null;
+      if (!link) return;
+      window.gtag?.("event", "conversion", {
+        send_to: WHATSAPP_CONVERSION_SEND_TO,
+      });
+    }
+
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
   }, []);
 
   return null;
@@ -174,11 +197,10 @@ function GoogleAnalytics() {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-
-
   return (
     <QueryClientProvider client={queryClient}>
       <GoogleAnalytics />
+      <WhatsAppConversionTracker />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
